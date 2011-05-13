@@ -1,0 +1,15 @@
+TWIDisplay	KEYWORD1
+changeAddress	KEYWORD2
+setBrightness	KEYWORD2
+clear	KEYWORD2
+setRotateMode	KEYWORD2
+setScrollMode	KEYWORD2
+setSegmentData	KEYWORD2
+setDot	KEYWORD2
+setDots	KEYWORD2
+setPosition	KEYWORD2
+writeInt	KEYWORD2
+writeChar	KEYWORD2
+writeStr	KEYWORD2
+writeTemperature	KEYWORD2
+writeTime	KEYWORD2
