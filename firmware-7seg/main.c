@@ -1,5 +1,5 @@
 /*
- * I2C 4-digit 7-segment display
+ * TWI 4-digit 7-segment display
  * (C) 2011 Akafugu
  *
  * This program is free software; you can redistribute it and/or modify it under the

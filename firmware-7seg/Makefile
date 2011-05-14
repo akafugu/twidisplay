@@ -16,7 +16,7 @@
 SILENT ?= @
 CROSS ?= avr-
 
-MCU ?= attiny2313
+MCU ?= attiny4313
 F_CPU ?= 8000000L
 
 TARGET = main
