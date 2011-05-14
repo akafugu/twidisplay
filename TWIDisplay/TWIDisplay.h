@@ -45,6 +45,7 @@ public:
 private:
   void  set_number(uint16_t num);
   int m_addr;
+  uint8_t m_dots;
   char m_data[4];
 };
 

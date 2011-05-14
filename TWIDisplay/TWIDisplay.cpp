@@ -17,10 +17,9 @@
 
 TWIDisplay::TWIDisplay(int addr)
 	: m_addr(addr)
+	, m_dots(0)
 {
 }
-
-
 
 void  TWIDisplay::set_number(uint16_t num)
 {
@@ -60,7 +59,7 @@ void TWIDisplay::clear()
 void TWIDisplay::setRotateMode()
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x80); //  set scroll mode
+	Wire.send(0x83); //  set scroll mode
 	Wire.send(0); // rotate mode
 	Wire.endTransmission();
 }
@@ -68,33 +67,40 @@ void TWIDisplay::setRotateMode()
 void TWIDisplay::setScrollMode()
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x80); //  set scroll mode
+	Wire.send(0x83); //  set scroll mode
 	Wire.send(1); // scroll mode
 	Wire.endTransmission();
 }
 
-
 void TWIDisplay::setSegmentData(int position, int segments)
 {
-	//fixme: implement
+	//fixme: implement (not yet supported in FW)
 }
 
 void TWIDisplay::setDot(int position, bool on)
 {
-	//fixme: implement
+	if (position > 3) return;
 	
-	// dots = (1 << position);
+	if (on) m_dots |= (1<<(position+1));
+	else m_dots &= ~(1<<(position+1));
+	
 	Wire.beginTransmission(m_addr);
 	Wire.send(0x85); //  set dots
-	Wire.send(0b1111);
+	Wire.send(m_dots);
 	Wire.endTransmission();
 }
 
 void TWIDisplay::setDots(bool dot0, bool dot1, bool dot2, bool dot3)
 {
+	m_dots = 0;
+	if (dot0) m_dots |= 1<<1;
+	if (dot1) m_dots |= 1<<2;
+	if (dot2) m_dots |= 1<<3;
+	if (dot3) m_dots |= 1<<4;
+
 	Wire.beginTransmission(m_addr);
 	Wire.send(0x85); //  set dots
-	Wire.send(0b1111);
+	Wire.send(m_dots);
 	Wire.endTransmission();
 }
 
@@ -108,6 +114,8 @@ void TWIDisplay::setPosition(int position)
 
 void TWIDisplay::writeInt(int val)
 {
+	clear();
+
 	Wire.beginTransmission(m_addr);
 
 	set_number(val);
@@ -128,6 +136,8 @@ void TWIDisplay::writeChar(char val)
 
 void TWIDisplay::writeStr(char* val)
 {
+	clear();
+
 	Wire.beginTransmission(m_addr);
 	
 	for (uint8_t i = 0; i < strlen(val); i++) {
@@ -140,24 +150,36 @@ void TWIDisplay::writeStr(char* val)
 
 void TWIDisplay::writeTemperature(int temp, char symbol)
 {
+	clear();
+
 	Wire.beginTransmission(m_addr);
-	
-	set_number(temp*100);
-	
-	for (int i = 0; i <= 2; i++) {
-		Wire.send(m_data[i]);
+
+	if (temp >= 0) {
+		set_number_ex(temp*100);
+		for (int i = 0; i <= 2; i++)
+			Wire.send(temp_buf[i]);
+	}
+	else {
+		Wire.send('-');
+		
+		set_number_ex(-temp*100);
+		for (int i = 0; i <= 1; i++)
+			Wire.send(temp_buf[i]);
 	}
 	
 	Wire.send(symbol);
-	
+		
 	Wire.send(0x85); // set dots
-	Wire.send(1<<2);
+	if (temp > 0) Wire.send(1<<2);
+	else Wire.send(0);
 
 	Wire.endTransmission();
 }
 
 void TWIDisplay::writeTime(int hour, int min, int sec)
 {
+	clear();
+
 	set_number(hour*100 + min);
 	
 	Wire.beginTransmission(m_addr);
