@@ -155,16 +155,16 @@ void TWIDisplay::writeTemperature(int temp, char symbol)
 	Wire.beginTransmission(m_addr);
 
 	if (temp >= 0) {
-		set_number_ex(temp*100);
+		set_number(temp*100);
 		for (int i = 0; i <= 2; i++)
-			Wire.send(temp_buf[i]);
+			Wire.send(m_data[i]);
 	}
 	else {
 		Wire.send('-');
 		
-		set_number_ex(-temp*100);
+		set_number(-temp*100);
 		for (int i = 0; i <= 1; i++)
-			Wire.send(temp_buf[i]);
+			Wire.send(m_data[i]);
 	}
 	
 	Wire.send(symbol);
