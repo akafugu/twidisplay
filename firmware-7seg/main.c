@@ -177,23 +177,23 @@ void main(void)
 	while(!usiTwiDataInReceiveBuffer() && counter <= MAX_COUNTER)
 	{
 		counter++;
-		_delay_ms(5);
-	}
-	
-	if(counter >= MAX_COUNTER)
-	{
-		uint8_t address = eeprom_read_byte(&b_slave_address);
-		uint8_t data[3];
-		data[2] = address % 10;
-		address /= 10;
-		data[1] = address % 10;
-		address /= 10;
-		data[0] = address % 10;
-	
-		set_char_at('A', 0);
-		set_char_at(data[0], 1);
-		set_char_at(data[1], 2);
-		set_char_at(data[2], 3);
+		_delay_ms(10);
+
+		if(counter == MAX_COUNTER)
+		{
+			uint8_t address = eeprom_read_byte(&b_slave_address);
+			uint8_t data[3];
+			data[2] = address % 10;
+			address /= 10;
+			data[1] = address % 10;
+			address /= 10;
+			data[0] = address % 10;
+			
+			set_char_at('A', 0);
+			set_char_at(data[0], 1);
+			set_char_at(data[1], 2);
+			set_char_at(data[2], 3);
+		}
 	}
 #endif //FEATURE_SHOW_ADDRESS_ON_STARTUP
 	
