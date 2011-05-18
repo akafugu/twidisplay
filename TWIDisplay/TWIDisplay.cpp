@@ -113,6 +113,8 @@ void TWIDisplay::setDots(bool dot0, bool dot1, bool dot2, bool dot3)
 
 void TWIDisplay::setPosition(int position)
 {
+	setRotateMode();
+	
 	Wire.beginTransmission(m_addr);
 	Wire.send(0x89); // set position
 	Wire.send(position);

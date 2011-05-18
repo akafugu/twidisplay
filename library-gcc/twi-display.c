@@ -115,6 +115,8 @@ void set_dots(uint8_t addr, bool dot0, bool dot1, bool dot2, bool dot3)
 
 void set_position(uint8_t addr, uint8_t position)
 {
+	set_rotate_mode(addr);
+	
 	twi_begin_transmission(addr);
 	twi_send_byte(0x89); // set position
 	twi_send_byte(position);
