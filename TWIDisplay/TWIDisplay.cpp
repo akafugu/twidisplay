@@ -41,6 +41,13 @@ void TWIDisplay::changeAddress(int new_addr)
 	Wire.endTransmission();
 }
 
+void TWIDisplay::showAddress()
+{
+	Wire.beginTransmission(m_addr);
+	Wire.send(0x90); // show address
+	Wire.endTransmission();
+}
+
 void TWIDisplay::setBrightness(int brightness)
 {
 	Wire.beginTransmission(m_addr);

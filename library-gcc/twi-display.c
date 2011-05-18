@@ -40,6 +40,14 @@ void change_address(uint8_t cur_addr, uint8_t new_addr)
 	twi_end_transmission();
 }
 
+
+void show_address(uint8_t addr)
+{
+	twi_begin_transmission(addr);
+	twi_send_byte(0x90); // show address
+	twi_end_transmission();
+}
+
 void set_brightness(uint8_t addr, uint8_t brightness)
 {
 	twi_begin_transmission(addr);

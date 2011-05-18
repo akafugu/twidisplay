@@ -75,8 +75,12 @@ void processTWI( void )
 			break;
 #ifdef FEATURE_CHANGE_TWI_ADDRESS
 		case 0x81: // set slave address
-			eeprom_update_byte(&b_slave_address, usiTwiReceiveByte());
-			usiTwiSlaveInit(eeprom_read_byte(&b_slave_address));
+			c = usiTwiReceiveByte();
+			if(c < 128) // Address is 7 bit
+			{
+				eeprom_update_byte(&b_slave_address, c);
+				usiTwiSlaveInit(eeprom_read_byte(&b_slave_address));
+			}
 			break;
 #endif
 		case 0x82: // clear display
@@ -84,7 +88,7 @@ void processTWI( void )
 			dots = 0;
 			counter = 0;
 			break;
-	case 0x83: // set scroll mode
+		case 0x83: // set scroll mode
 			c = usiTwiReceiveByte();
 
 			if (c == 0)
@@ -115,6 +119,22 @@ void processTWI( void )
 			break;
 		case 0x89: // set position (only valid for ROTATE mode)
 			counter = usiTwiReceiveByte();
+			break;
+		case 0x90: // Show address
+		{
+			uint8_t address = eeprom_read_byte(&b_slave_address);
+			uint8_t data[3];
+			data[2] = address % 10;
+			address /= 10;
+			data[1] = address % 10;
+			address /= 10;
+			data[0] = address % 10;
+				
+			set_char_at('A', 0);
+			set_char_at(data[0], 1);
+			set_char_at(data[1], 2);
+			set_char_at(data[2], 3);
+		}
 			break;
 		default:
 			if (scroll_mode == ROTATE) {

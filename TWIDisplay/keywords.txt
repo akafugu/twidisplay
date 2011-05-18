@@ -1,5 +1,6 @@
 TWIDisplay	KEYWORD1
 changeAddress	KEYWORD2
+showAddress		KEYWORD2
 setBrightness	KEYWORD2
 clear	KEYWORD2
 setRotateMode	KEYWORD2

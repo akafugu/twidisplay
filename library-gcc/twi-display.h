@@ -20,6 +20,7 @@
 #include "twi.h"
 
 void change_address(uint8_t cur_addr, uint8_t new_addr);
+void show_address(uint8_t addr);
 void set_brightness(uint8_t addr, uint8_t brightness);
 void clear(uint8_t addr);
 

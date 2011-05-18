@@ -25,6 +25,7 @@ public:
   TWIDisplay(int addr);
 
   void changeAddress(int new_addr);
+  void showAddress();
   void setBrightness(int brightness);
   void clear();
 
