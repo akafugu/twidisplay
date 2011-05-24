@@ -41,6 +41,7 @@ public:
   void writeChar(char val);
   void writeStr(char* val);
   void writeTemperature(int temp, char symbol);
+  void writeTemperature(int temp_t, int temp_f, char symbol);
   void writeTime(int hour, int min, int sec);
 
 private:

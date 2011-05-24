@@ -185,6 +185,34 @@ void TWIDisplay::writeTemperature(int temp, char symbol)
 	Wire.endTransmission();
 }
 
+void TWIDisplay::writeTemperature(int temp_t, int temp_f, char symbol)
+{
+	clear();
+
+	Wire.beginTransmission(m_addr);
+
+	if (temp_t >= 0) {
+		set_number(temp_t*100 + temp_f);
+		for (int i = 0; i <= 2; i++)
+			Wire.send(m_data[i]);
+	}
+	else {
+		Wire.send('-');
+		
+		set_number(-temp_t*100);
+		for (int i = 0; i <= 1; i++)
+			Wire.send(m_data[i]);
+	}
+	
+	Wire.send(symbol);
+		
+	Wire.send(0x85); // set dots
+	if (temp_t > 0) Wire.send(1<<2);
+	else Wire.send(0);
+
+	Wire.endTransmission();
+}
+
 void TWIDisplay::writeTime(int hour, int min, int sec)
 {
 	clear();
