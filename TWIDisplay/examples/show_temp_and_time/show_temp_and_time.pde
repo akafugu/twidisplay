@@ -25,15 +25,15 @@ TWIDisplay disp(SLAVE_ADDR);
 void setup()
 {
   Wire.begin();
-  disp.setRotateMode();
-  disp.clear();
 }
 
 void loop()
 {
   // for the test, just "fake" the time and temperature
   byte temp = 25;
-  byte hour = 0, min = 0, sec = 0;
+  static byte hour = 0;
+  static byte min = 0;
+  static byte sec = 0;
   
   for (int i = 0; i < 10; i++) {
     // show time for 5 seconds then temperature for 5 seconds
