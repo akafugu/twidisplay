@@ -14,12 +14,10 @@
  *
  */
 
-
-#include <WProgram.h>
 #include <Wire.h>
-#include "TWIDisplay.h"
+#include <TWIDisplay.h>
 
-#define SLAVE_ADDR 0x12 // 7-seg
+#define SLAVE_ADDR 0x12
 
 TWIDisplay disp(SLAVE_ADDR);
 
@@ -30,6 +28,8 @@ void setup()
   Serial.begin(9600);
   Serial.println("Serial Display Test");
 
+  disp.setRotateMode();
+  disp.clear();
   disp.setBrightness(255);
 }
 
