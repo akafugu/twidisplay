@@ -26,7 +26,6 @@ SRCS = main.c \
 	usiTwiSlave.c
 
 # Default values
-COMMON_CATHODE ?= NO
 FEATURE_SET_TIME ?= NO
 FEATURE_ALPHABET ?= YES
 FEATURE_CHANGE_TWI_ADDRESS ?= YES
@@ -41,7 +40,6 @@ VALUE_DEFS += DEFAULT_BRIGHTNESS
 
 # These will automatically be checked if they are set to YES
 YESNO_DEFS += DEMO \
-	COMMON_CATHODE \
 	FEATURE_SET_TIME \
 	FEATURE_ALPHABET \
 	FEATURE_CHANGE_TWI_ADDRESS \

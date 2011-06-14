@@ -27,6 +27,7 @@ uint8_t set_brightness(uint8_t b);
 void shift_in(char c);
 void set_char_at(char c, uint8_t offset);
 void set_segments_at(uint8_t segments, uint8_t offset);
+void shift_in_segments(uint8_t segments);
 void set_number(uint16_t num);
 void clear_screen(void);
 #ifdef FEATURE_SET_TIME

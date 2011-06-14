@@ -40,13 +40,14 @@
 #define cbi(var, mask)   ((var) &= (uint8_t)~(1 << mask))
 
 char data[4]; // Digit data
+char segment_data[4]; // Segment data
 
 // dots [bit 0~3]
 uint8_t dots = 0;
 
 uint16_t brightness = 80;	// Read from EEPROM on startup
 
-void display(uint8_t number, uint8_t digit);
+void display(uint8_t pos, uint8_t digit);
 void clearDisplay(void);
 
 void display_init(void)
@@ -93,6 +94,11 @@ void shift_in(char c)
 	data[1] = data[2];
 	data[2] = data[3];
 	data[3] = c;
+
+	segment_data[0] = segment_data[1];
+	segment_data[1] = segment_data[2];
+	segment_data[2] = segment_data[3];
+	segment_data[3] = 0;
 }
 
 void set_char_at(char c, uint8_t offset)
@@ -100,11 +106,23 @@ void set_char_at(char c, uint8_t offset)
 	data[offset] = c;
 }
 
-//fixme: does not yet work
-// need to rewrite meaning of data for this to work
 void set_segments_at(uint8_t segments, uint8_t offset)
 {
-	data[offset] = segments;
+	segment_data[offset] = segments;
+	data[offset] = 0b10000000; // set upper bit to indicate that segment data should be used for display
+}
+
+void shift_in_segments(uint8_t segments)
+{
+	data[0] = data[1];
+	data[1] = data[2];
+	data[2] = data[3];
+	data[3] = 0b10000000; // set upper bit to indicate that segment data should be used for display
+
+	segment_data[0] = segment_data[1];
+	segment_data[1] = segment_data[2];
+	segment_data[2] = segment_data[3];
+	segment_data[3] = segments;
 }
 
 // show number on screen
@@ -140,13 +158,13 @@ uint8_t multiplex_counter = 0;
 void display_multiplex(void)
 {
 	if (multiplex_counter == 0)
-		display(data[0], 1);
+		display(0, 1);
 	else if (multiplex_counter == 1)
-		display(data[1], 2);
+		display(1, 2);
 	else if (multiplex_counter == 2)
-		display(data[2], 3);
+		display(2, 3);
 	else if (multiplex_counter == 3)
-		display(data[3], 4);
+		display(3, 4);
 	else if (multiplex_counter == 4)
 		clearDisplay();
 
@@ -337,7 +355,7 @@ uint8_t calculate_segments(uint8_t character)
 }
 
 // Output number to digit 0, 1, 2 or 3
-void display(uint8_t character, uint8_t digit)
+void display(uint8_t pos, uint8_t digit)
 {	
 	clearDisplay();
 
@@ -358,7 +376,12 @@ void display(uint8_t character, uint8_t digit)
 			break;
 	}
 
-	uint8_t segments = calculate_segments(character);
+	uint8_t segments = 0;
+
+	if (data[pos] & 0b10000000)
+		segments = segment_data[pos];
+	else
+		segments = calculate_segments(data[pos]);
 	
 	// set dot
 	if (dots & (1<<digit))

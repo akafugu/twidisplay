@@ -234,3 +234,10 @@ void write_time(uint8_t addr, uint8_t hour, uint8_t min, uint8_t sec)
 	twi_end_transmission();
 }
 
+void write_segments(uint8_t addr, uint8_t segments)
+{
+	twi_begin_transmission(addr);
+	twi_send_byte(0x84); // receive segment data
+	twi_send_byte(segments);
+	twi_end_transmission();
+}

@@ -32,7 +32,6 @@ public:
   void setRotateMode();
   void setScrollMode();
 
-  void setSegmentData(int position, int segments);
   void setDot(int position, bool on);
   void setDots(bool dot0, bool dot1, bool dot2, bool dot3);
   void setPosition(int position);
@@ -43,6 +42,7 @@ public:
   void writeTemperature(int temp, char symbol);
   void writeTemperature(int temp_t, int temp_f, char symbol);
   void writeTime(int hour, int min, int sec);
+  void writeSegments(int segments);
 
 private:
   void  set_number(uint16_t num);

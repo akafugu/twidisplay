@@ -97,8 +97,16 @@ void processTWI( void )
 				scroll_mode = SCROLL;
 			break;
 		case 0x84: // receive segment data
-			c = usiTwiReceiveByte(); // position
-			set_segments_at(usiTwiReceiveByte(), c);
+			c = usiTwiReceiveByte(); // segment data
+
+			if (scroll_mode == ROTATE) {
+				set_segments_at(c, counter++);
+				if (counter >= 4) counter = 0;
+			}
+			else {
+				shift_in_segments(c);		
+			}
+
 			break;
 		case 0x85: // set dots (the four bits of the second byte controls dots individually)
 			dots = usiTwiReceiveByte();
@@ -137,6 +145,8 @@ void processTWI( void )
 		}
 			break;
 		default:
+			if (b >= 0x80) break; // anything above 0x80 is considered a reserved command and is ignored
+
 			if (scroll_mode == ROTATE) {
 				set_char_at(b, counter++);
 				if (counter >= 4) counter = 0;
@@ -181,6 +191,9 @@ void main(void)
 
 		if(counter == MAX_COUNTER)
 		{
+			// fixme: What if someone sets brighness to 0 and then changes the address
+			// should reset brightness here if it is too dim to see.
+
 			uint8_t address = eeprom_read_byte(&b_slave_address);
 			uint8_t data[3];
 			data[2] = address % 10;

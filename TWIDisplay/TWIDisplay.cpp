@@ -79,11 +79,6 @@ void TWIDisplay::setScrollMode()
 	Wire.endTransmission();
 }
 
-void TWIDisplay::setSegmentData(int position, int segments)
-{
-	//fixme: implement (not yet supported in FW)
-}
-
 void TWIDisplay::setDot(int position, bool on)
 {
 	if (position > 3) return;
@@ -244,5 +239,10 @@ void TWIDisplay::writeTime(int hour, int min, int sec)
 	Wire.endTransmission();
 }
 
-
-
+void TWIDisplay::writeSegments(int segments)
+{
+	Wire.beginTransmission(m_addr);
+	Wire.send(0x84); //  receive segment data
+	Wire.send((uint8_t)segments);
+	Wire.endTransmission();
+}
