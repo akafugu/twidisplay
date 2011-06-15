@@ -21,7 +21,7 @@ SCL - Pin A5
 GND - GND
 VCC - 5V
 
-After everything is hokked up, connect the USB port of the Arduino to your computer, select the correct port in the Tools->Serial Port menu, and press the Upload button. Once programming finished, you should see the display count from 0 to 9999.
+After everything is hooked up, connect the USB port of the Arduino to your computer, select the correct port in the Tools->Serial Port menu, and press the Upload button. Once programming finished, you should see the display count from 0 to 9999.
 
 avr-gcc Library
 ---------------
