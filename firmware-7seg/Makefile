@@ -16,37 +16,15 @@
 SILENT ?= @
 CROSS ?= avr-
 
-MCU ?= attiny4313
-F_CPU ?= 8000000L
+include Makefile.config
 
-TARGET = main
-
-SRCS = main.c \
-	display.c \
-	usiTwiSlave.c
-
-# Default values
-COMMON_CATHODE ?= NO
-FEATURE_SET_TIME ?= NO
-FEATURE_ALPHABET ?= YES
-FEATURE_CHANGE_TWI_ADDRESS ?= YES
-FEATURE_SHOW_ADDRESS_ON_STARTUP ?= YES
-
-ifeq ($(MCU), attiny4313)
-  FEATURE_SET_TIME ?= YES
-endif
-
-# These will automatically be checked and set 
-VALUE_DEFS += DEFAULT_BRIGHTNESS
-
-# These will automatically be checked if they are set to YES
-YESNO_DEFS += DEMO \
-	COMMON_CATHODE \
-	FEATURE_SET_TIME \
-	FEATURE_ALPHABET \
-	FEATURE_CHANGE_TWI_ADDRESS \
-	FEATURE_SHOW_ADDRESS_ON_STARTUP
-
+# These are set in Makefile.conf
+# MCU
+# F_CPU
+# TARGET
+# SRCS
+# VALUE_DEFS 
+# YESNO_DEFS
 
 OBJS = $(SRCS:.c=.o)
 
@@ -107,7 +85,7 @@ endif
 .SECONDARY:
 
 %.elf: $(OBJS)
-	@echo "[$(TARGET)] Linking:" $@...
+	@echo "Linking:" $@...
 	$(SILENT) $(CC) $(CFLAGS) $(OBJS) --output $@ $(LDFLAGS)
 
 %.o : %.cpp
@@ -150,17 +128,18 @@ endif
 
 # Fuses for internal 8MHz oscillator
 ifeq ($(MCU), atmega328p)
-  AVRDUDE_WRITE_FUSE = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
+  AVRDUDE_WRITE_FUSE ?= -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
 endif
 ifeq ($(MCU), atmega88)
-  AVRDUDE_WRITE_FUSE = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m
+  AVRDUDE_WRITE_FUSE ?= -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m
 endif
 ifeq ($(MCU), atmega8)
-  AVRDUDE_WRITE_FUSE = -U lfuse:w:0xe4:m -U hfuse:w:0xd9:m 
+  AVRDUDE_WRITE_FUSE ?= -U lfuse:w:0xe4:m -U hfuse:w:0xd9:m 
 endif
 ifeq ($(MCU), $(filter $(MCU), attiny2313 attiny4313))
-  AVRDUDE_WRITE_FUSE := -U lfuse:w:0xE4:m -U hfuse:w:0xDB:m
+  AVRDUDE_WRITE_FUSE ?= -U lfuse:w:0xe4:m -U hfuse:w:0xdb:m
   #AVRDUDE_WRITE_FUSE := -U lfuse:w:0x64:m #run with 1 Mhz clock #default clock mode
+  #AVRDUDE_WRITE_FUSE := -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m # attiny4313 only 4MHz
 endif
 
 ifneq ($(AVRDUDE_PROGRAMMER), )
@@ -168,16 +147,16 @@ flash: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) -U flash:w:$(TARGET).hex -U eeprom:w:$(TARGET).eep
 
 fuse:
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE) 
 
 install: fuse flash
 
 %.hex: %.elf
-	@echo "[$(TARGET)] Creating flash file:" $@...
+	@echo "Creating flash file:" $@...
 	$(SILENT) $(OBJCOPY) -O ihex -R .eeprom $< $@
 
 %.eep: %.elf
-	@echo "[$(TARGET)] Creating eeprom file:" $@...
+	@echo "Creating eeprom file:" $@...
 	$(SILENT) $(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
 	--change-section-lma .eeprom=0 -O ihex $< $@
 else
