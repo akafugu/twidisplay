@@ -46,7 +46,12 @@ void init(void)
 {
 	cli();	// disable interrupts
 
-	usiTwiSlaveInit(eeprom_read_byte(&b_slave_address));
+	uint8_t stored_address = eeprom_read_byte(&b_slave_address);
+	// Check that stored_address is sane
+	if (stored_address >= 128)
+		stored_address = SLAVE_ADDRESS;
+	
+	usiTwiSlaveInit(stored_address);
 	set_brightness(eeprom_read_byte(&b_brightness));
 	display_init();
 	

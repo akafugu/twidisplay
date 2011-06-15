@@ -168,7 +168,9 @@ flash: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) -U flash:w:$(TARGET).hex -U eeprom:w:$(TARGET).eep
 
 fuse:
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE) 
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE)
+
+install: fuse flash
 
 %.hex: %.elf
 	@echo "[$(TARGET)] Creating flash file:" $@...
