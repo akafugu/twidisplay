@@ -1,7 +1,7 @@
 /*
  * TWIDisplay: Arduino Library for Akafugu TWI/I2C serial displays
  * Segments: Shows how to show custom data on the display
- * (C) 2011 Akafugu
+ * (C) 2011 Akafugu Corporation
  *
  * This program is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software

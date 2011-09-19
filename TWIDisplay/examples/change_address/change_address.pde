@@ -6,7 +6,7 @@
  * To see the current address of a device at any time, plug in VCC and GND only,
  * and wait for several seconds. The address will be shown in the display (in ascii)
  *
- * (C) 2011 Akafugu
+ * (C) 2011 Akafugu Corporation
  *
  * This program is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
