@@ -36,46 +36,46 @@ void  TWIDisplay::set_number(uint16_t num)
 void TWIDisplay::changeAddress(int new_addr)
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x81); // change address
-	Wire.send(new_addr);
+	Wire.write(0x81); // change address
+	Wire.write(new_addr);
 	Wire.endTransmission();
 }
 
 void TWIDisplay::showAddress()
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x90); // show address
+	Wire.write(0x90); // show address
 	Wire.endTransmission();
 }
 
 void TWIDisplay::setBrightness(int brightness)
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x80); // set brightness
-	Wire.send(brightness);
+	Wire.write(0x80); // set brightness
+	Wire.write(brightness);
 	Wire.endTransmission();
 }
 
 void TWIDisplay::clear()
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x82); // clear
+	Wire.write(0x82); // clear
 	Wire.endTransmission();	
 }
 
 void TWIDisplay::setRotateMode()
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x83); //  set scroll mode
-	Wire.send(0); // rotate mode
+	Wire.write(0x83); //  set scroll mode
+	Wire.write((uint8_t)0); // rotate mode
 	Wire.endTransmission();
 }
 
 void TWIDisplay::setScrollMode()
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x83); //  set scroll mode
-	Wire.send(1); // scroll mode
+	Wire.write(0x83); //  set scroll mode
+	Wire.write(1); // scroll mode
 	Wire.endTransmission();
 }
 
@@ -87,8 +87,8 @@ void TWIDisplay::setDot(int position, bool on)
 	else m_dots &= ~(1<<(position+1));
 	
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x85); //  set dots
-	Wire.send(m_dots);
+	Wire.write(0x85); //  set dots
+	Wire.write(m_dots);
 	Wire.endTransmission();
 }
 
@@ -101,8 +101,8 @@ void TWIDisplay::setDots(bool dot0, bool dot1, bool dot2, bool dot3)
 	if (dot3) m_dots |= 1<<4;
 
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x85); //  set dots
-	Wire.send(m_dots);
+	Wire.write(0x85); //  set dots
+	Wire.write(m_dots);
 	Wire.endTransmission();
 }
 
@@ -111,8 +111,8 @@ void TWIDisplay::setPosition(int position)
 	setRotateMode();
 	
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x89); // set position
-	Wire.send(position);
+	Wire.write(0x89); // set position
+	Wire.write(position);
 	Wire.endTransmission();
 }
 
@@ -125,7 +125,7 @@ void TWIDisplay::writeInt(int val)
 	set_number(val);
 	
 	for (int i = 0; i <= 3; i++) {
-		Wire.send(m_data[i]);
+		Wire.write(m_data[i]);
 	}
 
 	Wire.endTransmission();
@@ -134,7 +134,7 @@ void TWIDisplay::writeInt(int val)
 void TWIDisplay::writeChar(char val)
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(val);
+	Wire.write(val);
 	Wire.endTransmission();
 }
 
@@ -145,7 +145,7 @@ void TWIDisplay::writeStr(char* val)
 	Wire.beginTransmission(m_addr);
 	
 	for (uint8_t i = 0; i < strlen(val); i++) {
-		Wire.send(val[i]);
+		Wire.write(val[i]);
 		if (i == 3) break;
 	}
 	
@@ -161,21 +161,21 @@ void TWIDisplay::writeTemperature(int temp, char symbol)
 	if (temp >= 0) {
 		set_number(temp*100);
 		for (int i = 0; i <= 2; i++)
-			Wire.send(m_data[i]);
+			Wire.write(m_data[i]);
 	}
 	else {
-		Wire.send('-');
+		Wire.write('-');
 		
 		set_number(-temp*100);
 		for (int i = 0; i <= 1; i++)
-			Wire.send(m_data[i]);
+			Wire.write(m_data[i]);
 	}
 	
-	Wire.send(symbol);
+	Wire.write(symbol);
 		
-	Wire.send(0x85); // set dots
-	if (temp > 0) Wire.send(1<<2);
-	else Wire.send(0);
+	Wire.write(0x85); // set dots
+	if (temp > 0) Wire.write(1<<2);
+	else Wire.write((uint8_t)0);
 
 	Wire.endTransmission();
 }
@@ -189,21 +189,21 @@ void TWIDisplay::writeTemperature(int temp_t, int temp_f, char symbol)
 	if (temp_t >= 0) {
 		set_number(temp_t*100 + temp_f);
 		for (int i = 0; i <= 2; i++)
-			Wire.send(m_data[i]);
+			Wire.write(m_data[i]);
 	}
 	else {
-		Wire.send('-');
+		Wire.write('-');
 		
 		set_number(-temp_t*100);
 		for (int i = 0; i <= 1; i++)
-			Wire.send(m_data[i]);
+			Wire.write(m_data[i]);
 	}
 	
-	Wire.send(symbol);
+	Wire.write(symbol);
 		
-	Wire.send(0x85); // set dots
-	if (temp_t > 0) Wire.send(1<<2);
-	else Wire.send(0);
+	Wire.write(0x85); // set dots
+	if (temp_t > 0) Wire.write(1<<2);
+	else Wire.write((uint8_t)0);
 
 	Wire.endTransmission();
 }
@@ -215,11 +215,11 @@ void TWIDisplay::writeTime(int hour, int min, int sec)
 	set_number(hour*100 + min);
 	
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x82); // clear
+	Wire.write(0x82); // clear
 	
 	// data
 	for (int i = 0; i <= 3; i++) {
-		Wire.send(m_data[i]);
+		Wire.write(m_data[i]);
 	}
 	
 	Wire.endTransmission();
@@ -228,12 +228,12 @@ void TWIDisplay::writeTime(int hour, int min, int sec)
 	Wire.beginTransmission(m_addr);
 	
 	if (sec % 2 == 0) {
-		Wire.send(0x85); // set dots
-		Wire.send(0);
+		Wire.write(0x85); // set dots
+		Wire.write((uint8_t)0);
 	}
 	else {
-		Wire.send(0x85); // set dots
-		Wire.send(1<<2);
+		Wire.write(0x85); // set dots
+		Wire.write(1<<2);
 	}
 
 	Wire.endTransmission();
@@ -242,7 +242,7 @@ void TWIDisplay::writeTime(int hour, int min, int sec)
 void TWIDisplay::writeSegments(int segments)
 {
 	Wire.beginTransmission(m_addr);
-	Wire.send(0x84); //  receive segment data
-	Wire.send((uint8_t)segments);
+	Wire.write(0x84); //  receive segment data
+	Wire.write((uint8_t)segments);
 	Wire.endTransmission();
 }

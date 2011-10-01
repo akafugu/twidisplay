@@ -16,7 +16,7 @@
 #ifndef TWIDISPLAY_H
 #define TWIDISPLAY_H
 
-#include <WProgram.h>
+#include <Arduino.h>
 #include <../Wire/Wire.h>
 
 class TWIDisplay
