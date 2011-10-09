@@ -241,3 +241,23 @@ void write_segments(uint8_t addr, uint8_t segments)
 	twi_send_byte(segments);
 	twi_end_transmission();
 }
+
+int get_firmware_revision(uint8_t addr)
+{
+  twi_begin_transmission(addr);
+  twi_send_byte(0x8a); // get firmware revision
+  twi_end_transmission();
+
+  twi_request_from(addr, 1);
+  return twi_receive();
+}
+
+int get_digits(uint8_t addr)
+{
+  twi_begin_transmission(addr);
+  twi_send_byte(0x8b); // get number of digits
+  twi_end_transmission();
+
+  twi_request_from(addr, 1);
+  return twi_receive();
+}

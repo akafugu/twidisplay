@@ -246,3 +246,23 @@ void TWIDisplay::writeSegments(int segments)
 	Wire.write((uint8_t)segments);
 	Wire.endTransmission();
 }
+
+int TWIDisplay::getFirmwareRevision()
+{
+  Wire.beginTransmission(m_addr);
+  Wire.write(0x8a); // get firmware revision
+  Wire.endTransmission();
+
+  Wire.requestFrom(m_addr, 1);
+  return Wire.read();
+}
+
+int TWIDisplay::getDigits()
+{
+  Wire.beginTransmission(m_addr);
+  Wire.write(0x8b); // get number of digits
+  Wire.endTransmission();
+
+  Wire.requestFrom(m_addr, 1);
+  return Wire.read();
+}

@@ -39,4 +39,7 @@ void write_temperature(uint8_t addr, int temp, char symbol);
 void write_time(uint8_t addr, uint8_t hour, uint8_t min, uint8_t sec);
 void write_segments(uint8_t addr, uint8_t segments);
 
+int get_firmware_revision(uint8_t addr);
+int get_digits(uint8_t addr);
+
 #endif // TWI_DISPLAY_H

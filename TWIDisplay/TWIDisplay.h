@@ -44,6 +44,8 @@ public:
   void writeTime(int hour, int min, int sec);
   void writeSegments(int segments);
 
+  int getFirmwareRevision();
+  int getDigits();
 private:
   void  set_number(uint16_t num);
   int m_addr;

@@ -133,6 +133,12 @@ void processTWI( void )
 		case 0x89: // set position (only valid for ROTATE mode)
 			counter = usiTwiReceiveByte();
 			break;
+		case 0x8a: // get firmware revision
+			usiTwiTransmitByte(1);
+			break;
+		case 0x8b: // get number of digits
+			usiTwiTransmitByte(4);
+			break;
 		case 0x90: // Show address
 		{
 			uint8_t address = eeprom_read_byte(&b_slave_address);
