@@ -16,7 +16,11 @@
 #ifndef TWIDISPLAY_H
 #define TWIDISPLAY_H
 
-#include <Arduino.h>
+#if defined(ARDUINO) && ARDUINO >= 100
+#  include <Arduino.h>
+#else
+#  include <WProgram.h>
+#endif
 #include <../Wire/Wire.h>
 
 class TWIDisplay

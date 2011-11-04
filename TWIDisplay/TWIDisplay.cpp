@@ -15,6 +15,11 @@
 
 #include "TWIDisplay.h"
 
+#if defined(ARDUINO) && ARDUINO < 100
+#  define write send
+#  define read  receive
+#endif
+
 TWIDisplay::TWIDisplay(int addr)
 	: m_addr(addr)
 	, m_dots(0)
