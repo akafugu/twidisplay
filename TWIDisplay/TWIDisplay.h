@@ -23,7 +23,10 @@
 #endif
 #include <../Wire/Wire.h>
 
-class TWIDisplay
+#include <inttypes.h>
+#include <Print.h>
+
+class TWIDisplay : public Print
 {
 public:
   TWIDisplay(int addr);
@@ -50,6 +53,9 @@ public:
 
   int getFirmwareRevision();
   int getDigits();
+
+  // Inherited from Print
+  virtual size_t write(uint8_t val) { writeChar((char)val); }
 private:
   void  set_number(uint16_t num);
   int m_addr;

@@ -34,7 +34,7 @@ void loop()
   char message[] = "This is a long message    ";
   
   for (int i = 0; i < strlen(message); i++) {
-    disp.writeChar(message[i]);
+    disp.print(message[i]);
     delay(250);
   }
   

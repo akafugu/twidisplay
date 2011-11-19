@@ -4,7 +4,11 @@
  *
  * After changing the address, you must reset or toggle power on your device.
  * To see the current address of a device at any time, plug in VCC and GND only,
- * and wait for several seconds. The address will be shown in the display (in ascii)
+ * and wait for several seconds. The address will be shown in the display.
+ *
+ * The address will be displayed as a decimal number, prefixed by the letter A,
+ * for instance A018, which is the default address (0x12 in HEX)
+ *
  *
  * (C) 2011 Akafugu Corporation
  *

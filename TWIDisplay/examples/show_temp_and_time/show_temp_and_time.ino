@@ -31,7 +31,7 @@ void loop()
 {
   // for the test, just "fake" the time and temperature
   byte temp = 25;
-  static byte hour = 0;
+  static byte hour = 12;
   static byte min = 0;
   static byte sec = 0;
   
