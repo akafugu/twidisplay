@@ -51,6 +51,19 @@ AVRDUDE_SPEED = 115200
 
 To start programming, type make flash.
 
+Dot Net Micro Library
+---
+
+There is a library for dot net micro in the directory TWIDisplay-dotnetmicro.
+The library is designed for microcontroller boards that run the dot net micro
+framework.
+
+It has been tested with Netduino and FEZ Panda. (The included project file is
+for Netduino, to build for FEZ Panda some changes may be required).
+
+To run on Netduino, pull-up resistors on SDA and SCL are required. On FEZ Panda
+the internal pull-ups can be used.
+
 Firmware
 --------
 
