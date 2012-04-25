@@ -215,7 +215,7 @@ void TWIDisplay::writeTemperature(int temp_t, int temp_f, char symbol)
 
 void TWIDisplay::writeTime(int hour, int min, int sec)
 {
-	clear();
+	setPosition(0);
 
 	set_number(hour*100 + min);
 	
@@ -230,18 +230,7 @@ void TWIDisplay::writeTime(int hour, int min, int sec)
 	Wire.endTransmission();
 	
 	// second dot on/off
-	Wire.beginTransmission(m_addr);
-	
-	if (sec % 2 == 0) {
-		Wire.write(0x85); // set dots
-		Wire.write((uint8_t)0);
-	}
-	else {
-		Wire.write(0x85); // set dots
-		Wire.write(1<<2);
-	}
-
-	Wire.endTransmission();
+	setDot(1, sec % 2 == 0);
 }
 
 void TWIDisplay::writeSegments(int segments)
