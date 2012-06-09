@@ -1,6 +1,6 @@
 /*
  * TWIDisplay: Arduino Library for Akafugu TWI/I2C serial displays
- * (C) 2011 Akafugu Corporation
+ * (C) 2011-12 Akafugu Corporation
  *
  * This program is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -31,7 +31,7 @@ class TWIDisplay : public Print
 public:
   TWIDisplay(int addr);
 
-  void begin(uint8_t digits);
+  void begin();
 
   void changeAddress(int new_addr);
   void showAddress();
@@ -57,9 +57,11 @@ public:
   void writeTemperature(int temp_t, int temp_f, char symbol);
   void writeTime(int hour, int min, int sec);
   void writeSegments(int segments);
+  void writeSegments16(uint16_t segments);
 
   int getFirmwareRevision();
   int getDigits();
+  int getSegments();
 
   // functions available on TWIDisplay-LCD only
   void setBeep(int val);
@@ -74,7 +76,8 @@ private:
   uint8_t m_apostrophes;
   char m_data[8];
 
-  int8_t m_digits;
+  uint8_t m_digits;
+  uint8_t m_version;
 
   void print2(int num);
 };

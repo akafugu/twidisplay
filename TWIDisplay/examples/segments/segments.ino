@@ -1,7 +1,8 @@
 /*
  * TWIDisplay: Arduino Library for Akafugu TWI/I2C serial displays
+ * (C) 2011-12 Akafugu Corporation
+ *
  * Segments: Shows how to show custom data on the display
- * (C) 2011 Akafugu Corporation
  *
  * This program is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -17,7 +18,7 @@
 #include <Wire.h>
 #include <TWIDisplay.h>
 
-#define SLAVE_ADDR 0x12
+#define SLAVE_ADDR 18
 
 TWIDisplay disp(SLAVE_ADDR);
 
@@ -25,6 +26,7 @@ void setup()
 {
   Wire.begin();
   
+  disp.begin();
   disp.setRotateMode();
   disp.clear();
   disp.setBrightness(255);

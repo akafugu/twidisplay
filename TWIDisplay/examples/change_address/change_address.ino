@@ -1,5 +1,7 @@
 /*
  * TWIDisplay: Arduino Library for Akafugu TWI/I2C serial displays
+ * (C) 2011-12 Akafugu Corporation
+ *
  * Address change: Shows how to change the slave address of a device
  *
  * After changing the address, you must reset or toggle power on your device.
@@ -27,15 +29,16 @@
 #include <TWIDisplay.h>
 
 // current address
-#define CURRENT_ADDR 0x12
+#define CURRENT_ADDR 18
 // new address
-#define NEW_ADDR 0x13
+#define NEW_ADDR 19
 
 TWIDisplay disp(CURRENT_ADDR);
 
 void setup()
 {
   Wire.begin();
+  disp.begin();
   disp.setRotateMode();
   disp.clear();
 

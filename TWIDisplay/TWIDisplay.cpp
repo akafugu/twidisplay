@@ -1,6 +1,6 @@
 /*
  * TWIDisplay: Arduino Library for Akafugu TWI/I2C serial displays
- * (C) 2011 Akafugu Corporation
+ * (C) 2011-12 Akafugu Corporation
  *
  * This program is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -25,14 +25,14 @@ TWIDisplay::TWIDisplay(int addr)
 	, m_dots(0)
 	, m_apostrophes(0)
 	, m_digits(4)
+	, m_version(1)
 {
 }
 
-void TWIDisplay::begin(uint8_t digits)
+void TWIDisplay::begin()
 {
-	if (digits != 4 && digits != 8)
-		digits = 4;
-	m_digits = digits;
+	m_digits = getDigits();
+	m_version = getFirmwareRevision();
 }
 
 void TWIDisplay::set_number(uint16_t num)
@@ -152,6 +152,8 @@ void TWIDisplay::setDots(bool dot0, bool dot1, bool dot2, bool dot3, bool dot4, 
 
 void TWIDisplay::setApostrophe(int position, bool on)
 {
+	if (m_version < 2) return; // not supported on revision 1 FW
+
 	if (position < 0 || position > 7) return;
 	
 	if (position == 7 && on) m_apostrophes |= 1;
@@ -167,6 +169,8 @@ void TWIDisplay::setApostrophe(int position, bool on)
 
 void TWIDisplay::setApostrophes(bool a0, bool a1, bool a2, bool a3)
 {
+	if (m_version < 2) return; // not supported on revision 1 FW
+
 	m_apostrophes = 0;
 	if (a0) m_apostrophes |= 1<<1;
 	if (a1) m_apostrophes |= 1<<2;
@@ -328,30 +332,58 @@ void TWIDisplay::writeSegments(int segments)
 	Wire.endTransmission();
 }
 
+void TWIDisplay::writeSegments16(uint16_t segments)
+{
+	uint8_t a = segments & 0xFF;
+	uint8_t b = (segments>>8) & 0xFF;
+
+	Wire.beginTransmission(m_addr);
+	Wire.write(0x94); //  receive segment data
+	Wire.write(a);
+	Wire.write(b);
+	Wire.endTransmission();
+}
+
 int TWIDisplay::getFirmwareRevision()
 {
+  uint8_t ret = 0;
   Wire.beginTransmission(m_addr);
   Wire.write(0x8a); // get firmware revision
   Wire.endTransmission();
 
   Wire.requestFrom(m_addr, 1);
-  return Wire.read();
+  if (Wire.available()) ret = Wire.read();
+  return ret;
 }
 
 int TWIDisplay::getDigits()
 {
+  uint8_t ret = 0;
   Wire.beginTransmission(m_addr);
   Wire.write(0x8b); // get number of digits
   Wire.endTransmission();
 
   Wire.requestFrom(m_addr, 1);
-  return Wire.read();
+  if (Wire.available()) ret = Wire.read();
+  return ret;
+}
+
+int TWIDisplay::getSegments()
+{
+  uint8_t ret = 0;
+  Wire.beginTransmission(m_addr);
+  Wire.write(0x8c); // get number of segments
+  Wire.endTransmission();
+
+  Wire.requestFrom(m_addr, 1);
+  if (Wire.available()) ret = Wire.read();
+  return ret;
 }
 
 // TWIDisplay 8-digit LCD only
 void TWIDisplay::setBeep(int val)
 {
-	if (getFirmwareRevision() < 2) return;
+	if (m_version < 2) return; // not supported on revision 1 FW
 	if (val < 0 || val > 2) return;
 
 	Wire.beginTransmission(m_addr);
@@ -363,7 +395,7 @@ void TWIDisplay::setBeep(int val)
 // TWIDisplay 8-digit LCD only
 void TWIDisplay::setBias(int val)
 {
-	if (getFirmwareRevision() < 2) return;
+	if (m_version < 2) return; // not supported on revision 1 FW
 	if (val != 2 && val != 3) return;
 
 	Wire.beginTransmission(m_addr);
