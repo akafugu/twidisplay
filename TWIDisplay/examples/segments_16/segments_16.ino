@@ -2,7 +2,7 @@
  * TWIDisplay: Arduino Library for Akafugu TWI/I2C serial displays
  * (C) 2011-12 Akafugu Corporation
  *
- * Segments: Shows how to show custom data on the display
+ * Segments_16: Shows how to show custom data on the display (for TWIDisplay LCD 8-digit)
  *
  * This program is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -15,6 +15,8 @@
  *
  */
 
+// This example is meant for TWIDisplay LCD 8-digit
+// It will not run on TWIDisplay LED 4-digit
 #include <Wire.h>
 #include <TWIDisplay.h>
 
@@ -25,8 +27,11 @@ TWIDisplay disp(SLAVE_ADDR);
 void setup()
 {
   Wire.begin();
-  
+
   disp.begin();
+
+  int rev = disp.getDigits();
+  
   disp.setRotateMode();
   disp.clear();
   disp.setBrightness(255);
@@ -34,29 +39,22 @@ void setup()
 
 void loop()
 {
-  uint8_t segments_a = 1;
-  uint8_t segments_b = 0b00100000;
+  uint16_t segments_1 = 0b10000000;
+  uint16_t segments_2 = 0b10000000000000;
   
-  while (1) {
-    disp.writeSegments(segments_a);
-    disp.writeSegments(segments_b);
-    disp.writeSegments(segments_a);
-    disp.writeSegments(segments_b);
+  for (uint8_t i = 0; i < 7; i++) {
+    disp.writeSegments16(segments_1);
+    disp.writeSegments16(segments_2);
+    disp.writeSegments16(segments_1);
+    disp.writeSegments16(segments_2);
+    disp.writeSegments16(segments_1);
+    disp.writeSegments16(segments_2);
+    disp.writeSegments16(segments_1);
+    disp.writeSegments16(segments_2);
 
+    // shift bytes to make segments spin towards the right and left
+    segments_1 <<= 1;    
+    segments_2 >>= 1;    
     delay(70);
-    
-    // rotate segments_a towards the left
-    // this will create a counterclockwise spinning animation
-    segments_a <<= 1;
-  
-    if (segments_a == 0b01000000)
-      segments_a = 1;
-
-    // rotate segments_b towards the right
-    // this will create a clockwise spinning animation
-    segments_b >>= 1;
-  
-    if (segments_b == 0)
-      segments_b = 0b00100000;
   }  
 }

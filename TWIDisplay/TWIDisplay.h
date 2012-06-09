@@ -1,6 +1,6 @@
 /*
  * TWIDisplay: Arduino Library for Akafugu TWI/I2C serial displays
- * (C) 2011 Akafugu Corporation
+ * (C) 2011-12 Akafugu Corporation
  *
  * This program is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -31,6 +31,8 @@ class TWIDisplay : public Print
 public:
   TWIDisplay(int addr);
 
+  void begin();
+
   void changeAddress(int new_addr);
   void showAddress();
   void setBrightness(int brightness);
@@ -41,6 +43,11 @@ public:
 
   void setDot(int position, bool on);
   void setDots(bool dot0, bool dot1, bool dot2, bool dot3);
+  void setDots(bool dot0, bool dot1, bool dot2, bool dot3, bool dot4, bool dot5, bool dot6, bool dot7);
+  void setApostrophe(int position, bool on);
+  void setApostrophes(bool a0, bool a1, bool a2, bool a3);
+  void setApostrophes(bool a0, bool a1, bool a2, bool a3, bool a4, bool a5, bool a6, bool a7);
+
   void setPosition(int position);
 
   void writeInt(int val);
@@ -50,9 +57,15 @@ public:
   void writeTemperature(int temp_t, int temp_f, char symbol);
   void writeTime(int hour, int min, int sec);
   void writeSegments(int segments);
+  void writeSegments16(uint16_t segments);
 
   int getFirmwareRevision();
   int getDigits();
+  int getSegments();
+
+  // functions available on TWIDisplay-LCD only
+  void setBeep(int val);
+  void setBias(int val);
 
   // Inherited from Print
   virtual size_t write(uint8_t val) { writeChar((char)val); }
@@ -60,7 +73,13 @@ private:
   void  set_number(uint16_t num);
   int m_addr;
   uint8_t m_dots;
-  char m_data[4];
+  uint8_t m_apostrophes;
+  char m_data[8];
+
+  uint8_t m_digits;
+  uint8_t m_version;
+
+  void print2(int num);
 };
 
 

@@ -18,13 +18,14 @@
 #include <Wire.h>
 #include <TWIDisplay.h>
 
-#define SLAVE_ADDR 0x12
+#define SLAVE_ADDR 18
 
 TWIDisplay disp(SLAVE_ADDR);
 
 void setup()
 {
   Wire.begin();
+  disp.begin();
 }
 
 void loop()
