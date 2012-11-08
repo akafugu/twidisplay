@@ -16,6 +16,7 @@ writeChar	KEYWORD2
 writeStr	KEYWORD2
 writeTemperature	KEYWORD2
 writeTime	KEYWORD2
+writeTime12h	KEYWORD2
 writeSegments	KEYWORD2
 writeSegments16	KEYWORD2
 write	KEYWORD2

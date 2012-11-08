@@ -297,7 +297,14 @@ void TWIDisplay::print2(int num)
 {
   if (num < 10)
     print('0');
-   print(num); 
+  print(num); 
+}
+
+void TWIDisplay::print2sp(int num)
+{
+  if (num < 10)
+    print(' ');
+  print(num); 
 }
 
 void TWIDisplay::writeTime(int hour, int min, int sec)
@@ -317,6 +324,31 @@ void TWIDisplay::writeTime(int hour, int min, int sec)
 	}
 	else {
 		print2(hour);
+		print2(min);
+	
+		// second dot on/off
+		setDot(1, sec % 2 == 0);
+	}
+}
+
+void TWIDisplay::writeTime12h(int hour, int min, int sec)
+{
+	setPosition(0);
+	if (hour == 0)  hour = 12;  // show 12 for midnight & noon
+
+	if (m_digits == 8) {
+		print(' ');
+		print2sp(hour);  // use space for fill if <10
+		print2(min);
+		print2(sec);
+		print(' ');
+		
+		setDot(2, true);
+		setDot(3, false);
+		setDot(4, true);
+	}
+	else {
+		print2sp(hour);  // use space for fill if <10
 		print2(min);
 	
 		// second dot on/off

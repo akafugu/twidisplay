@@ -56,6 +56,7 @@ public:
   void writeTemperature(int temp, char symbol);
   void writeTemperature(int temp_t, int temp_f, char symbol);
   void writeTime(int hour, int min, int sec);
+  void writeTime12h(int hour, int min, int sec);  // for 12h time display
   void writeSegments(int segments);
   void writeSegments16(uint16_t segments);
 
@@ -80,6 +81,7 @@ private:
   uint8_t m_version;
 
   void print2(int num);
+  void print2sp(int num);  // leading space if < 10
 };
 
 
