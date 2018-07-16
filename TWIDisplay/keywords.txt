@@ -8,8 +8,8 @@ setScrollMode	KEYWORD2
 setSegmentData	KEYWORD2
 setDot	KEYWORD2
 setDots	KEYWORD2
-setApostrophe KEYWORD2
-setApostrophes KEYWORD2
+setApostrophe	KEYWORD2
+setApostrophes	KEYWORD2
 setPosition	KEYWORD2
 writeInt	KEYWORD2
 writeChar	KEYWORD2
